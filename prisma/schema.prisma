@@ -1,0 +1,24 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Session {
+  id          Int      @id @default(autoincrement())
+  fileName    String
+  defectTypes String   // JSON array: string[]
+  uploadedAt  DateTime @default(now())
+  records     DefectRecord[]
+}
+
+model DefectRecord {
+  id          Int     @id @default(autoincrement())
+  sessionId   Int
+  session     Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  date        String
+  total       Int
+  defectsJson String  // JSON object: Record<string, number>
+}
